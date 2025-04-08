@@ -10,10 +10,12 @@ exports.getNotices = async (req, res) => {
   }
 };
 
-// 최근 공지사항 4개만 반환 (메인용)
+// 🔥 최근 공지사항 4개만 반환 (메인용)
 exports.getLatestNotices = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 4;
+
   try {
-    const notices = await Notice.getLatest();
+    const notices = await Notice.getLatest(limit);
     res.json(notices);
   } catch (err) {
     res.status(500).json({ message: '최신 공지사항 조회 실패', error: err });

@@ -12,10 +12,10 @@ const Notice = {
     });
   },
 
-  // 최근 공지사항 4개만 불러오기 (메인 페이지용)
-  getLatest: () => {
+  // 🔥 최근 공지사항 limit개 불러오기 (메인 페이지용)
+  getLatest: (limit = 4) => {
     return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT 4', (err, results) => {
+      db.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT ?', [limit], (err, results) => {
         if (err) return reject(err);
         resolve(results);
       });
@@ -25,10 +25,14 @@ const Notice = {
   // 공지사항 등록
   create: (title, content) => {
     return new Promise((resolve, reject) => {
-      db.query('INSERT INTO notices (title, content) VALUES (?, ?)', [title, content], (err, result) => {
-        if (err) return reject(err);
-        resolve(result.insertId);
-      });
+      db.query(
+        'INSERT INTO notices (title, content) VALUES (?, ?)',
+        [title, content],
+        (err, result) => {
+          if (err) return reject(err);
+          resolve(result.insertId);
+        }
+      );
     });
   }
 };
