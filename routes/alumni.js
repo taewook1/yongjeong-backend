@@ -13,4 +13,14 @@ router.get('/latest', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM alumni_news ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error('❌ 전체 동창 동정 조회 실패:', err);
+    res.status(500).json({ msg: '전체 조회 실패' });
+  }
+});
+
 module.exports = router;
