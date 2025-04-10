@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { register, login } = require("../controllers/authController");
-const db = require("../db");
+const db = require('../config/database');
 
 // 인증번호 메모리 저장소
 const codes = new Map();
@@ -16,7 +16,9 @@ router.get("/check-username", async (req, res) => {
   if (!username) return res.status(400).json({ error: '아이디 누락' });
 
   try {
+    console.log('중복 확인 요청 도착:', username);
     const [rows] = await db.query('SELECT id FROM users WHERE username = ?', [username]);
+    console.log('조회 결과:', rows);
     res.json({ exists: rows.length > 0 });
   } catch (err) {
     console.error(err);

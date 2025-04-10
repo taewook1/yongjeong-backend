@@ -1,14 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const noticeController = require('../controllers/noticeController');
+const db = require('../config/database');
 
-// 공지사항 전체 조회
-router.get('/', noticeController.getNotices);
+// 전체 공지사항
+router.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM notices ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error('전체 공지사항 조회 오류:', err);
+    res.status(500).json({ msg: '공지사항 전체 조회 실패' });
+  }
+});
 
-// 최근 공지사항 4개 조회
-router.get('/latest', noticeController.getLatestNotices);
-
-// 공지사항 작성 (관리자만 사용하도록 이후 제한 가능)
-router.post('/', noticeController.createNotice);
+// 최신 공지사항 4개 불러오기
+router.get('/latest', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT * FROM notices ORDER BY created_at DESC LIMIT 4');
+    res.json(rows);
+  } catch (err) {
+    console.error('공지사항 조회 오류:', err);
+    res.status(500).json({ msg: '공지사항 조회 실패' });
+  }
+});
 
 module.exports = router;
