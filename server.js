@@ -10,6 +10,7 @@ const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
 const noticeRoutes = require("./routes/notices");
 const alumniRoutes = require("./routes/alumni");
+const commentRoutes = require('./routes/comments');
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use("/api/posts", postRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/alumni-news", alumniRoutes);
+app.use('/api/posts/:postId/comments', commentRoutes);
 
 //모든 인증 관련 라우트
 app.use("/api/auth", authRoutes);
