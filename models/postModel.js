@@ -22,7 +22,7 @@ const Post = {
   create: (title, content, author) => {
     return new Promise((resolve, reject) => {
       db.query(
-        'INSERT INTO posts (title, content, user_id) VALUES (?, ?, ?)',
+        'INSERT INTO posts (title, content, author) VALUES (?, ?, ?)',
         [title, content, author],
         (err, result) => {
           if (err) return reject(err);
@@ -35,7 +35,7 @@ const Post = {
   update: (id, title, content, author) => {
     return new Promise((resolve, reject) => {
       db.query(
-        'UPDATE posts SET title = ?, content = ? WHERE id = ? AND user_id = ?',
+        'UPDATE posts SET title = ?, content = ? WHERE id = ? AND author = ?',
         [title, content, id, author],
         (err, result) => {
           if (err) return reject(err);
@@ -48,7 +48,7 @@ const Post = {
   delete: (id, author) => {
     return new Promise((resolve, reject) => {
       db.query(
-        'DELETE FROM posts WHERE id = ? AND user_id = ?',
+        'DELETE FROM posts WHERE id = ? AND author = ?',
         [id, author],
         (err, result) => {
           if (err) return reject(err);
