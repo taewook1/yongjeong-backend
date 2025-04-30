@@ -1,61 +1,68 @@
-const db = require('../config/database');
+const db = require('../config/database'); // mysql2/promise 기반 연결
 
 const Post = {
-  getAll: () => {
-    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM posts ORDER BY created_at DESC', (err, results) => {
-        if (err) return reject(err);
-        resolve(results);
-      });
-    });
+  // 전체 조회
+  getAll: async () => {
+    try {
+      const [rows] = await db.query('SELECT * FROM posts ORDER BY created_at DESC');
+      return rows;
+    } catch (err) {
+      console.error('❗getAll 쿼리 실패:', err);
+      throw err;
+    }
   },
 
-  getById: (id) => {
-    return new Promise((resolve, reject) => {
-      db.query('SELECT * FROM posts WHERE id = ?', [id], (err, results) => {
-        if (err) return reject(err);
-        resolve(results[0]); // 단일 게시글 리턴
-      });
-    });
+  // 단일 조회
+  getById: async (id) => {
+    try {
+      const [rows] = await db.query('SELECT * FROM posts WHERE id = ?', [id]);
+      return rows[0];
+    } catch (err) {
+      console.error('❗getById 쿼리 실패:', err);
+      throw err;
+    }
   },
 
-  create: (title, content, author) => {
-    return new Promise((resolve, reject) => {
-      db.query(
+  // 생성
+  create: async (title, content, author) => {
+    try {
+      const [result] = await db.query(
         'INSERT INTO posts (title, content, author) VALUES (?, ?, ?)',
-        [title, content, author],
-        (err, result) => {
-          if (err) return reject(err);
-          resolve(result.insertId);
-        }
+        [title, content, author]
       );
-    });
+      return result.insertId;
+    } catch (err) {
+      console.error('❗create 쿼리 실패:', err);
+      throw err;
+    }
   },
 
-  update: (id, title, content, author) => {
-    return new Promise((resolve, reject) => {
-      db.query(
+  // 수정
+  update: async (id, title, content, author) => {
+    try {
+      const [result] = await db.query(
         'UPDATE posts SET title = ?, content = ? WHERE id = ? AND author = ?',
-        [title, content, id, author],
-        (err, result) => {
-          if (err) return reject(err);
-          resolve(result);
-        }
+        [title, content, id, author]
       );
-    });
+      return result;
+    } catch (err) {
+      console.error('❗update 쿼리 실패:', err);
+      throw err;
+    }
   },
 
-  delete: (id, author) => {
-    return new Promise((resolve, reject) => {
-      db.query(
+  // 삭제
+  delete: async (id, author) => {
+    try {
+      const [result] = await db.query(
         'DELETE FROM posts WHERE id = ? AND author = ?',
-        [id, author],
-        (err, result) => {
-          if (err) return reject(err);
-          resolve(result);
-        }
+        [id, author]
       );
-    });
+      return result;
+    } catch (err) {
+      console.error('❗delete 쿼리 실패:', err);
+      throw err;
+    }
   },
 };
 

@@ -3,8 +3,9 @@ const Post = require('../models/postModel');
 exports.getPosts = async (req, res) => {
   try {
     const posts = await Post.getAll();
-    res.json(posts);
+    res.json(posts); 
   } catch (err) {
+    console.error('❗게시글 불러오기 실패:', err);
     res.status(500).json({ message: '게시글 불러오기 실패', error: err });
   }
 };
