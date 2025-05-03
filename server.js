@@ -1,11 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
 
 const db = require("./config/database");
-
-// 📌 라우터
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/posts");
 const noticeRoutes = require("./routes/notices");
@@ -14,18 +11,14 @@ const commentRoutes = require('./routes/comments');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // ✅ 최신 방식
 
-//라우트 설정
 app.use("/api/posts", postRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use("/api/alumni-news", alumniRoutes);
-app.use('/api/posts/:postId/comments', commentRoutes);
-
-//모든 인증 관련 라우트
+app.use('/api/posts/:postId/comments', commentRoutes); // ✅ mergeParams가 있어야 params 전달됨
 app.use("/api/auth", authRoutes);
 
-//기본 라우트
 app.get("/", (req, res) => {
   res.send("🎉 Welcome to Yongjeong Alumni API!");
 });

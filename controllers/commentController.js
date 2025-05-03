@@ -10,7 +10,9 @@ exports.getComments = async (req, res) => {
 };
 
 exports.createComment = async (req, res) => {
-  const { author, content } = req.body;
+  const { content } = req.body;
+  const author = req.user?.name; // ✅ 실명 기반으로 저장
+
   if (!author || !content) {
     return res.status(400).json({ message: '작성자와 내용을 입력해주세요.' });
   }

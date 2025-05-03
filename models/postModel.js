@@ -38,11 +38,11 @@ const Post = {
   },
 
   // 수정
-  update: async (id, title, content, author) => {
+  update: async (id, title, content) => {
     try {
       const [result] = await db.query(
-        'UPDATE posts SET title = ?, content = ? WHERE id = ? AND author = ?',
-        [title, content, id, author]
+        'UPDATE posts SET title = ?, content = ? WHERE id = ?',
+        [title, content, id]
       );
       return result;
     } catch (err) {
@@ -52,11 +52,11 @@ const Post = {
   },
 
   // 삭제
-  delete: async (id, author) => {
+  delete: async (id) => {
     try {
       const [result] = await db.query(
-        'DELETE FROM posts WHERE id = ? AND author = ?',
-        [id, author]
+        'DELETE FROM posts WHERE id = ?',
+        [id]
       );
       return result;
     } catch (err) {

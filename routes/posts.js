@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/postController');
+const authenticateUser = require('../middleware/authMiddleware'); // ✅ 추가
 
-router.get('/', postController.getPosts);               // 전체 목록
-router.get('/:id', postController.getPostById);         // 개별 게시글
-router.post('/', postController.createPost);            // 생성
-router.put('/:id', postController.updatePost);          // 수정
-router.delete('/:id', postController.deletePost);       // 삭제
+router.get('/', postController.getPosts);
+router.get('/:id', postController.getPostById);
+
+// ✅ 인증 필요한 요청들에만 미들웨어 연결
+router.post('/', authenticateUser, postController.createPost);
+router.put('/:id', authenticateUser, postController.updatePost);
+router.delete('/:id', authenticateUser, postController.deletePost);
 
 module.exports = router;
